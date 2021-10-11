@@ -4,6 +4,7 @@ from connection import connectToDB
 from createPgSchema import createPgSchema
 from getGaugeCodes import getGaugeCodes
 from createPgTables import createPgTables
+from createFunctions import createFunctions
 from getLegend import getLegend
 from fillPgTables import fillPgTables
 from getGauges import getGauges
@@ -20,14 +21,17 @@ gaugeCodes = getGaugeCodes(CSV_DIRECTORY)
 
 createPgTables(connection, cursor, DB_SCHEMA, gaugeCodes)
 
+createFunctions(connection, cursor)
+"""
 legend = getLegend(cursor, DB_SCHEMA, 'legend')
 
 fillPgTables(connection, cursor, DB_SCHEMA, CSV_DIRECTORY, legend)
 """
 gauges = getGauges(cursor, DB_SCHEMA)
-"""
+
 createMatViews(connection, cursor, DB_SCHEMA, gauges)
 
 createIndexes(connection, cursor, DB_SCHEMA, gauges)
-"""
+
 calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)
+"""
