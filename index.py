@@ -14,7 +14,7 @@ from calcStatistics import calcMeanAnnuals
 
 (connection, cursor) = connectToDB(
     DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-"""
+
 createPgSchema(connection, cursor, DB_SCHEMA)
 
 gaugeCodes = getGaugeCodes(CSV_DIRECTORY)
@@ -22,16 +22,15 @@ gaugeCodes = getGaugeCodes(CSV_DIRECTORY)
 createPgTables(connection, cursor, DB_SCHEMA, gaugeCodes)
 
 createFunctions(connection, cursor)
-"""
+
 legend = getLegend(cursor, DB_SCHEMA, 'legend')
 
 fillPgTables(connection, cursor, DB_SCHEMA, CSV_DIRECTORY, legend)
-"""
+
 gauges = getGauges(cursor, DB_SCHEMA)
 
 createMatViews(connection, cursor, DB_SCHEMA, gauges)
 
-createIndexes(connection, cursor, DB_SCHEMA, gauges)
+#createIndexes(connection, cursor, DB_SCHEMA, gauges)
 
 calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)
-"""
