@@ -70,7 +70,7 @@ def createFunctions(conn, cursor, schemaName):
                 BEGIN
                     RETURN QUERY
                     EXECUTE
-                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT min(stage) FROM {0}."'||tbl||'abs")'; 
+                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT min(stage) FROM {0}."'||tbl||'abs") LIMIT 1'; 
                 END;        
         $BODY$;
 
@@ -84,7 +84,7 @@ def createFunctions(conn, cursor, schemaName):
                 BEGIN
                     RETURN QUERY
                     EXECUTE
-                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT max(stage) FROM {0}."'||tbl||'abs")'; 
+                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT max(stage) FROM {0}."'||tbl||'abs") LIMIT 1'; 
                 END;        
         $BODY$;
         """.format(schemaName)
