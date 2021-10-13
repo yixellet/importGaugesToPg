@@ -5,7 +5,7 @@ def createFunctions(conn, cursor, schemaName):
 
     cursor.execute(
         """
-        CREATE OR REPLACE FUNCTION {0}.count_obs(IN tbl character varying)
+        CREATE OR REPLACE FUNCTION {0}."count_obs"(IN tbl character varying)
             RETURNS TABLE(year integer, filled integer, total integer)
             LANGUAGE 'plpgsql'
             VOLATILE
@@ -29,7 +29,7 @@ def createFunctions(conn, cursor, schemaName):
         END;
         $BODY$;
 
-        CREATE OR REPLACE FUNCTION {0}.getRefElev(IN date date,IN uuid uuid)
+        CREATE OR REPLACE FUNCTION {0}."getRefElev"(IN date date,IN uuid uuid)
             RETURNS double precision 
             LANGUAGE 'sql' 
             VOLATILE 
@@ -49,16 +49,16 @@ def createFunctions(conn, cursor, schemaName):
             EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."'|| _tbl || 'abs"'
             INTO result;
         END
-        $func$
+        $func$;
 
         CREATE OR REPLACE FUNCTION {0}."calcMeanAnnualIceFree"(_tbl integer, OUT result numeric)
             LANGUAGE plpgsql AS
         $func$
         BEGIN
-            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."'|| _tbl || 'abs" WHERE date_part('month', date) > 3 AND date_part('month', date) < 12'
+            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."'|| _tbl || 'abs" WHERE date_part(''month'', date) > 3 AND date_part(''month'', date) < 12'
             INTO result;
         END
-        $func$
+        $func$;
         """.format(schemaName)
     )
     print('--- Созданы функции ---')

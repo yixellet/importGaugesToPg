@@ -8,7 +8,7 @@ def createViews(conn, cursor, schema, gauges):
             CREATE OR REPLACE VIEW {0}."{1}abs"
             AS
             SELECT date,
-                   round(({0}.getrefelev(date, %(uid)s) + value::double precision/100)::numeric, 2) AS stage,
+                   round(({0}."getRefElev"(date, %(uid)s) + value::double precision/100)::numeric, 2) AS stage,
                    props
             FROM {0}."{1}";
             """.format(schema, gauge[2]),

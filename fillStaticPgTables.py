@@ -46,7 +46,7 @@ def fillStaticPgTables(conn, cursor, schemaName, statDataDir):
                 """
                 INSERT INTO {0}."maxStageProbGms" (gauge, "1p", "3p", "5p", "10p", "25p", "50p") VALUES 
                 (
-                    (SELECT uuid FROM {0}.gauges WHERE "name" = {1}),
+                    (SELECT uuid FROM {0}.gauges WHERE "name" = '{1}'),
                     {2},{3},{4},{5},{6},{7}
                 );
                 """.format(schemaName, fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6])
@@ -60,7 +60,7 @@ def fillStaticPgTables(conn, cursor, schemaName, statDataDir):
                 """
                 INSERT INTO {0}."meanAnnualsGms" (gauge, "allPeriod", "iceFree") VALUES 
                 (
-                    (SELECT uuid FROM {0}.gauges WHERE "name" = {1}),
+                    (SELECT uuid FROM {0}.gauges WHERE "name" = '{1}'),
                     {2},{3}
                 );
                 """.format(schemaName, fields[0], fields[1], fields[2])

@@ -17,7 +17,7 @@ from calcStatistics import calcMeanAnnuals
 
 createPgSchema(connection, cursor, DB_SCHEMA)
 
-gaugeCodes = getGaugeCodes(CSV_DIRECTORY)
+gaugeCodes = getGaugeCodes(STATIC_DATA)
 
 createPgTables(connection, cursor, DB_SCHEMA, gaugeCodes)
 
@@ -34,4 +34,4 @@ createViews(connection, cursor, DB_SCHEMA, gauges)
 
 createIndexes(connection, cursor, DB_SCHEMA, gauges)
 
-#calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)
+calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)
