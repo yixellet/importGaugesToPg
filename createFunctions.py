@@ -59,6 +59,34 @@ def createFunctions(conn, cursor, schemaName):
             INTO result;
         END
         $func$;
+
+        CREATE OR REPLACE FUNCTION {0}."calcMinStage"(IN tbl integer)
+            RETURNS TABLE(date date, stage numeric)
+            LANGUAGE 'plpgsql'
+            VOLATILE
+            PARALLEL UNSAFE
+            COST 100    ROWS 1    
+        AS $BODY$
+                BEGIN
+                    RETURN QUERY
+                    EXECUTE
+                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT min(stage) FROM {0}."'||tbl||'abs")'; 
+                END;        
+        $BODY$;
+
+        CREATE OR REPLACE FUNCTION {0}."calcMaxStage"(IN tbl integer)
+            RETURNS TABLE(date date, stage numeric)
+            LANGUAGE 'plpgsql'
+            VOLATILE
+            PARALLEL UNSAFE
+            COST 100    ROWS 1    
+        AS $BODY$
+                BEGIN
+                    RETURN QUERY
+                    EXECUTE
+                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT max(stage) FROM {0}."'||tbl||'abs")'; 
+                END;        
+        $BODY$;
         """.format(schemaName)
     )
     print('--- Созданы функции ---')
