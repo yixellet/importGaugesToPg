@@ -41,6 +41,15 @@ def createFunctions(conn, cursor):
         WHERE $2 = "ref_elevations".gauge AND
         ($1 BETWEEN "ref_elevations"."startDate" AND "ref_elevations"."endDate")
         $BODY$;
+
+        CREATE OR REPLACE FUNCTION hydro.getRefElev(IN date date,IN uuid uuid)
+            RETURNS double precision LANGUAGE 'sql' VOLATILE PARALLEL UNSAFE COST 100
+        AS $BODY$
+        SELECT "ref_elevations".elevation
+        FROM hydro."ref_elevations"
+        WHERE $2 = "ref_elevations".gauge AND
+        ($1 BETWEEN "ref_elevations"."startDate" AND "ref_elevations"."endDate")
+        $BODY$;
         """
     )
 

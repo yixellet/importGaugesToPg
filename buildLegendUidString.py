@@ -1,10 +1,8 @@
-def buildLegendUidString(legend, symbolsString, gauge, year, date):
+def buildLegendUidString(legend, symbolsString, gauge, year, date, log):
     """
     Создает строковое представление списка uid'ов 
     на основе строки с условными знаками
     """
-
-    log = open('log.txt', 'a')
 
     legSymbols = []
     for sym in legend:
@@ -16,12 +14,12 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date):
             try:
                 if symbol == 'H':
                     symbolIdx = legSymbols.index('Н')
-                elif symbol == 'Ч' or symbol == 'X' or symbol == 'х' or symbol == 'x':
+                elif symbol == 'Ч' or symbol == 'X' or symbol == 'x' or symbol == 'х':
                     symbolIdx = legSymbols.index('Х')
-                elif symbol == 'K':
-                    symbolIdx = legSymbols.index('К')
-                elif symbol == 'C':
+                elif symbol == 'C' or symbol == 'с' or symbol == 'c':
                     symbolIdx = legSymbols.index('С')
+                elif symbol == 'K' or symbol == 'k' or symbol == 'к':
+                    symbolIdx = legSymbols.index('К')
                 else:
                     symbolIdx = legSymbols.index(symbol)
             except ValueError:
@@ -29,7 +27,6 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date):
             else:
                 symbolUidStr = symbolUidStr + legend[symbolIdx][1] + ','
         symbolUidStr = symbolUidStr[:-1] + '}'
-        log.close()
         return symbolUidStr
     else:
         return "{}"

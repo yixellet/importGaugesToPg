@@ -4,22 +4,25 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
     """
     for code in gaugeCodesArray:
         cursor.execute(
-            'CREATE TABLE IF NOT EXISTS {0}."{1}" ( \
-                id bigserial NOT NULL, \
-                date date NOT NULL, \
-                value integer, \
-                props uuid[], \
-                PRIMARY KEY (id) \
-            ); \
-            ALTER TABLE IF EXISTS {0}."{1}" OWNER to postgres; \
-            '.format(schemaName, code)
+            """
+            CREATE TABLE IF NOT EXISTS {0}."{1}"
+            (
+                id bigserial NOT NULL,
+                date date NOT NULL,
+                value integer,
+                props uuid[],
+                PRIMARY KEY (id)
+            );
+            ALTER TABLE IF EXISTS {0}."{1}" OWNER to postgres;
+            """.format(schemaName, code)
         )
     cursor.execute(
         """
-        CREATE TABLE {0}."meanAnnuals"
+        CREATE TABLE IF NOT EXISTS {0}."meanAnnuals"
         (
             id serial NOT NULL,
             gauge uuid NOT NULL,
+            source character varying(20),
             "allPeriod" double precision,
             "iceFree" double precision,
             PRIMARY KEY (id),
@@ -53,8 +56,7 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
                 NOT VALID
         );
         ALTER TABLE IF EXISTS {0}."stageProb" OWNER to postgres;
-        )
-        """
+        """.format(schemaName)
     )
     conn.commit()
     print('--- Созданы таблицы в БД ---')

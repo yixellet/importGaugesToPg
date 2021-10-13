@@ -5,7 +5,8 @@ def calcMeanAnnuals(conn, cursor, schemaName, gauges):
     for gauge in gauges:
         cursor.execute(
             """
-            INSERT INTO {0}."meanAnnuals" (gauge, "allPeriod") VALUES ('{2}',
+            INSERT INTO {0}."meanAnnuals" (gauge, source, "allPeriod") VALUES
+			('{2}', 'calculated',
             (
                 SELECT round(avg(stage)::numeric, 2) FROM {0}."{1}abs"
             ));
