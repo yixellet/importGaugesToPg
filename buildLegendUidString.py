@@ -6,7 +6,7 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date, log):
 
     legSymbols = []
     for sym in legend:
-        legSymbols.append(sym[2])
+        legSymbols.append(sym[1])
 
     if len(symbolsString) != 0:
         symbolUidStr = '{'
@@ -25,7 +25,7 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date, log):
             except ValueError:
                 log.write(symbolsString + '          ' + gauge + '   ' + year + '   ' + date + '      ' + '\n')
             else:
-                symbolUidStr = symbolUidStr + legend[symbolIdx][1] + ','
+                symbolUidStr = symbolUidStr + legend[symbolIdx][0] + ','
         symbolUidStr = symbolUidStr[:-1] + '}'
         return symbolUidStr
     else:

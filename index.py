@@ -1,14 +1,14 @@
 from config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_SCHEMA, \
-    DB_USER, CSV_DIRECTORY
+    DB_USER, CSV_DIRECTORY, STATIC_DATA
 from connection import connectToDB
 from createPgSchema import createPgSchema
 from getGaugeCodes import getGaugeCodes
 from createPgTables import createPgTables
+from fillStaticPgTables import fillStaticPgTables
 from createFunctions import createFunctions
-from getLegend import getLegend
+from getTable import getTable
 from fillPgTables import fillPgTables
-from getGauges import getGauges
-from createMatViews import createMatViews
+from createViews import createViews
 from createIndexes import createIndexes
 from calcStatistics import calcMeanAnnuals
 
@@ -21,16 +21,17 @@ gaugeCodes = getGaugeCodes(CSV_DIRECTORY)
 
 createPgTables(connection, cursor, DB_SCHEMA, gaugeCodes)
 
-createFunctions(connection, cursor)
+createFunctions(connection, cursor, DB_SCHEMA)
 
-legend = getLegend(cursor, DB_SCHEMA, 'legend')
+fillStaticPgTables(connection, cursor, DB_SCHEMA, STATIC_DATA)
+
+legend = getTable(cursor, DB_SCHEMA, 'legend')
+gauges = getTable(cursor, DB_SCHEMA, 'gauges')
 
 fillPgTables(connection, cursor, DB_SCHEMA, CSV_DIRECTORY, legend)
 
-gauges = getGauges(cursor, DB_SCHEMA)
+createViews(connection, cursor, DB_SCHEMA, gauges)
 
-createMatViews(connection, cursor, DB_SCHEMA, gauges)
+createIndexes(connection, cursor, DB_SCHEMA, gauges)
 
-#createIndexes(connection, cursor, DB_SCHEMA, gauges)
-
-calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)
+#calcMeanAnnuals(connection, cursor, DB_SCHEMA, gauges)

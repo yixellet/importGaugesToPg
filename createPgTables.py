@@ -2,6 +2,46 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
     """
     Создает таблицы в схеме
     """
+
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS {0}.gauges
+        (
+            uuid uuid NOT NULL,
+            geom geometry NOT NULL,
+            code integer,
+            name character varying(50),
+            river character varying(50),
+            PRIMARY KEY (uuid)
+        );
+        ALTER TABLE IF EXISTS {0}.gauges OWNER to postgres;
+
+        CREATE TABLE IF NOT EXISTS {0}.legend
+        (
+            uuid uuid NOT NULL,
+            symbol character varying(4),
+            description character varying(100),
+            PRIMARY KEY (uuid)
+        );
+        ALTER TABLE IF EXISTS {0}.legend OWNER to postgres;
+
+        CREATE TABLE IF NOT EXISTS {0}."ref_elevations"
+        (
+            id serial NOT NULL,
+            gauge uuid NOT NULL,
+            elev double precision,
+            "startDate" date,
+            "endDate" date,
+            PRIMARY KEY (id),
+            FOREIGN KEY (gauge)
+                REFERENCES {0}.gauges (uuid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+                NOT VALID
+        );
+        ALTER TABLE IF EXISTS {0}."ref_elevations" OWNER to postgres;
+        """.format(schemaName)
+    )
     for code in gaugeCodesArray:
         cursor.execute(
             """
@@ -18,11 +58,10 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
         )
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS {0}."meanAnnuals"
+        CREATE TABLE IF NOT EXISTS {0}."meanAnnualsGms"
         (
             id serial NOT NULL,
             gauge uuid NOT NULL,
-            source character varying(20),
             "allPeriod" double precision,
             "iceFree" double precision,
             PRIMARY KEY (id),
@@ -32,16 +71,12 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
                 ON DELETE NO ACTION
                 NOT VALID
         );
-        ALTER TABLE IF EXISTS {0}."meanAnnuals" OWNER to postgres;
-        """.format(schemaName)
-    )
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS {0}."stageProb"
+        ALTER TABLE IF EXISTS {0}."meanAnnualsGms" OWNER to postgres;
+        
+        CREATE TABLE IF NOT EXISTS {0}."maxStageProbGms"
         (
             id serial NOT NULL,
             gauge uuid NOT NULL,
-            source character varying(20),
             "1p" double precision,
             "3p" double precision,
             "5p" double precision,
@@ -55,7 +90,7 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
                 ON DELETE NO ACTION
                 NOT VALID
         );
-        ALTER TABLE IF EXISTS {0}."stageProb" OWNER to postgres;
+        ALTER TABLE IF EXISTS {0}."maxStageProbGms" OWNER to postgres;
         """.format(schemaName)
     )
     conn.commit()

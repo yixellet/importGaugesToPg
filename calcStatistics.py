@@ -2,16 +2,21 @@ def calcMeanAnnuals(conn, cursor, schemaName, gauges):
     """
     Вычисляет среднемноголетние отметки (за безледный и за весь период)
     """
-    for gauge in gauges:
-        cursor.execute(
-            """
-            INSERT INTO {0}."meanAnnuals" (gauge, source, "allPeriod") VALUES
-			('{2}', 'calculated',
-            (
-                SELECT round(avg(stage)::numeric, 2) FROM {0}."{1}abs"
-            ));
-            """.format(schemaName, gauge[2], gauge[5])
-        )
+    
+    cursor.execute(
+        """
+        CREATE MATERIALIZED VIEW IF NOT EXISTS {0}."meanAnnualsCalc"
+        AS
+        SELECT {0}.uuid,
+                {0}."calcMeanAnnualTotal"({0}.code) AS "allPeriod",
+                {0}."calcMeanAnnualIceFree"({0}.code) AS "iceFree"
+        FROM {0}.gauges
+        WITH DATA;
+
+        ALTER TABLE IF EXISTS {0}."meanAnnualsCalc"
+            OWNER TO postgres;
+		""".format(schemaName)
+	)
     conn.commit()
 
     """

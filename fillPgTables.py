@@ -1,5 +1,4 @@
 import os
-import psycopg2
 from buildLegendUidString import buildLegendUidString
 
 def fillPgTables(conn, cursor, schemaName, directory, legend):
@@ -20,17 +19,13 @@ def fillPgTables(conn, cursor, schemaName, directory, legend):
                         lineArr = line.split(',')
                         try:
                             if len(lineArr[0]) != 0 and len(lineArr[1]) != 0:
-                                if lineArr[0].find('1900') != -1:
-                                    print(code + '  ' + file + '    1900')
                                 if len(lineArr) == 3:
                                     legUidStr = buildLegendUidString(legend, lineArr[2], code, file, lineArr[0], log)
                                 else:
                                     legUidStr = '{}'
-                                try:
-                                    cursor.execute('INSERT INTO {0}."{1}" (date, value, props) VALUES (\'{2}\', {3}, \'{4}\') ON CONFLICT DO NOTHING;' \
-                                        .format(schemaName, code, lineArr[0].replace('"', ''), lineArr[1].replace('"', ''), legUidStr))
-                                except:
-                                    log.write('SyntaxError -> ' + code + '   ' + file + ' ' + line + '\n')
+                                cursor.execute('INSERT INTO {0}."{1}" (date, value, props) VALUES (\'{2}\', {3}, \'{4}\') ON CONFLICT DO NOTHING;' \
+                                    .format(schemaName, code, lineArr[0].replace('"', ''), lineArr[1].replace('"', ''), legUidStr))
+
                         except IndexError:
                             log.write('IndexError -> ' + code + '   ' + file + '\n')
                 except UnicodeDecodeError:

@@ -6,7 +6,6 @@ def createIndexes(conn, cursor, schemaName, gauges):
         cursor.execute(
             """
             CREATE INDEX "{1}_idx" ON {0}."{1}" USING btree(date);
-            CREATE INDEX "{1}abs_idx" ON {0}."{1}abs" USING btree(date);
             """.format(schemaName, gauge[2])
         )
     conn.commit()
