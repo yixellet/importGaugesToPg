@@ -11,14 +11,17 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date):
         legSymbols.append(sym[2])
 
     if len(symbolsString) != 0:
-        print(gauge + '  ' + year)
         symbolUidStr = '{'
         for symbol in symbolsString:
             try:
                 if symbol == 'H':
                     symbolIdx = legSymbols.index('Н')
-                elif symbol == 'Ч' or symbol == 'X':
+                elif symbol == 'Ч' or symbol == 'X' or symbol == 'х' or symbol == 'x':
                     symbolIdx = legSymbols.index('Х')
+                elif symbol == 'K':
+                    symbolIdx = legSymbols.index('К')
+                elif symbol == 'C':
+                    symbolIdx = legSymbols.index('С')
                 else:
                     symbolIdx = legSymbols.index(symbol)
             except ValueError:
