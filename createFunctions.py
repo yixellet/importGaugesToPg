@@ -39,7 +39,7 @@ def createFunctions(conn, cursor, schemaName):
         SELECT "ref_elevations".elev
         FROM {0}."ref_elevations"
         WHERE $2 = "ref_elevations".gauge AND
-        ($1 BETWEEN "ref_elevations"."startDate" AND "ref_elevations"."endDate")
+        ($1 BETWEEN "ref_elevations"."startDate" AND (CASE WHEN "ref_elevations"."endDate" IS NULL THEN now() ELSE "ref_elevations"."endDate" END))
         $BODY$;
 
         CREATE OR REPLACE FUNCTION {0}."calcMeanAnnualTotal"(_tbl integer, OUT result numeric)
