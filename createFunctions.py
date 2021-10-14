@@ -22,7 +22,7 @@ def createFunctions(conn, cursor, schemaName):
                     WHEN date_part(''year'', date)::integer % 4 = 0 THEN 366
                     ELSE 365
                     END) AS total
-            FROM {0}."' || tbl ||
+            FROM {0}."s' || tbl ||
             '" WHERE date_part(''year'', date) = '|| i || 
             ' GROUP BY date_part(''year'', date)'; 
         END LOOP;
@@ -46,7 +46,7 @@ def createFunctions(conn, cursor, schemaName):
             LANGUAGE plpgsql AS
         $func$
         BEGIN
-            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."'|| _tbl || 'abs"'
+            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."s'|| _tbl || '"'
             INTO result;
         END
         $func$;
@@ -55,7 +55,7 @@ def createFunctions(conn, cursor, schemaName):
             LANGUAGE plpgsql AS
         $func$
         BEGIN
-            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."'|| _tbl || 'abs" WHERE date_part(''month'', date) > 3 AND date_part(''month'', date) < 12'
+            EXECUTE 'SELECT round(avg(stage)::numeric, 2) FROM {0}."s'|| _tbl || '" WHERE date_part(''month'', date) > 3 AND date_part(''month'', date) < 12'
             INTO result;
         END
         $func$;
@@ -70,7 +70,7 @@ def createFunctions(conn, cursor, schemaName):
                 BEGIN
                     RETURN QUERY
                     EXECUTE
-                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT min(stage) FROM {0}."'||tbl||'abs") LIMIT 1'; 
+                    'SELECT date, stage FROM {0}."s'||tbl||'" WHERE stage = (SELECT min(stage) FROM {0}."s'||tbl||'") LIMIT 1'; 
                 END;        
         $BODY$;
 
@@ -84,7 +84,7 @@ def createFunctions(conn, cursor, schemaName):
                 BEGIN
                     RETURN QUERY
                     EXECUTE
-                    'SELECT date, stage FROM {0}."'||tbl||'abs" WHERE stage = (SELECT max(stage) FROM {0}."'||tbl||'abs") LIMIT 1'; 
+                    'SELECT date, stage FROM {0}."s'||tbl||'" WHERE stage = (SELECT max(stage) FROM {0}."s'||tbl||'") LIMIT 1'; 
                 END;        
         $BODY$;
         """.format(schemaName)

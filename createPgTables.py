@@ -45,7 +45,7 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
     for code in gaugeCodesArray:
         cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS {0}."{1}"
+            CREATE TABLE IF NOT EXISTS {0}."v{1}"
             (
                 id bigserial NOT NULL,
                 date date NOT NULL,
@@ -53,7 +53,7 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
                 props uuid[],
                 PRIMARY KEY (id)
             );
-            ALTER TABLE IF EXISTS {0}."{1}" OWNER to postgres;
+            ALTER TABLE IF EXISTS {0}."v{1}" OWNER to postgres;
             """.format(schemaName, code)
         )
     cursor.execute(

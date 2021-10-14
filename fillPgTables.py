@@ -23,7 +23,7 @@ def fillPgTables(conn, cursor, schemaName, directory, legend):
                                     legUidStr = buildLegendUidString(legend, lineArr[2], code, file, lineArr[0], log)
                                 else:
                                     legUidStr = '{}'
-                                cursor.execute('INSERT INTO {0}."{1}" (date, value, props) VALUES (\'{2}\', {3}, \'{4}\') ON CONFLICT DO NOTHING;' \
+                                cursor.execute('INSERT INTO {0}."v{1}" (date, value, props) VALUES (\'{2}\', {3}, \'{4}\') ON CONFLICT DO NOTHING;' \
                                     .format(schemaName, code, lineArr[0].replace('"', ''), lineArr[1].replace('"', ''), legUidStr))
 
                         except IndexError:
