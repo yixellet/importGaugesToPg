@@ -20,6 +20,8 @@ def buildLegendUidString(legend, symbolsString, gauge, year, date, log):
                     symbolIdx = legSymbols.index('С')
                 elif symbol == 'K' or symbol == 'k' or symbol == 'к':
                     symbolIdx = legSymbols.index('К')
+                elif symbol == 'P' or symbol == 'p' or symbol == 'р':
+                    symbolIdx = legSymbols.index('Р')
                 else:
                     symbolIdx = legSymbols.index(symbol)
             except ValueError:
