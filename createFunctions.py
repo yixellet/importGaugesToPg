@@ -19,7 +19,7 @@ def createFunctions(conn, cursor, schemaName):
             'SELECT date_part(''year'', date)::integer AS year,
                 count(*)::integer AS filled,
                 (CASE
-                    WHEN date_part(''year'', date)::integer % 4 = 0 THEN 366
+                    WHEN date_part(''year'', date)::integer % 4 = 0 AND date_part(''year'', date)::integer % 100 <> 0 THEN 366
                     ELSE 365
                     END) AS total
             FROM {0}."s' || tbl ||
