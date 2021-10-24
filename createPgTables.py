@@ -30,8 +30,8 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
             id serial NOT NULL,
             gauge uuid NOT NULL,
             elev double precision,
-            "startDate" date,
-            "endDate" date,
+            "startDate" timestamp with time zone,
+            "endDate" timestamp with time zone,
             PRIMARY KEY (id),
             FOREIGN KEY (gauge)
                 REFERENCES {0}.gauges (uuid) MATCH SIMPLE
@@ -48,7 +48,7 @@ def createPgTables(conn, cursor, schemaName, gaugeCodesArray):
             CREATE TABLE IF NOT EXISTS {0}."v{1}"
             (
                 id bigserial NOT NULL,
-                date date NOT NULL,
+                date timestamp with time zone NOT NULL,
                 value integer,
                 props uuid[],
                 PRIMARY KEY (id)

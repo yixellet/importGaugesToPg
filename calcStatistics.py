@@ -7,9 +7,9 @@ def calcMeanAnnuals(conn, cursor, schemaName, gauges):
         """
         CREATE MATERIALIZED VIEW IF NOT EXISTS {0}."meanAnnualsCalc"
         AS
-        SELECT {0}.uuid,
-                {0}."calcMeanAnnualTotal"({0}.code) AS "allPeriod",
-                {0}."calcMeanAnnualIceFree"({0}.code) AS "iceFree"
+        SELECT gauges.uuid,
+                gauges."calcMeanAnnualTotal"(gauges.code) AS "allPeriod",
+                gauges."calcMeanAnnualIceFree"(gauges.code) AS "iceFree"
         FROM {0}.gauges
         WITH DATA;
 

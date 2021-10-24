@@ -29,7 +29,7 @@ def createFunctions(conn, cursor, schemaName):
         END;
         $BODY$;
 
-        CREATE OR REPLACE FUNCTION {0}."getRefElev"(IN date date,IN uuid uuid)
+        CREATE OR REPLACE FUNCTION {0}."getRefElev"(IN date timestamp with time zone,IN uuid uuid)
             RETURNS double precision 
             LANGUAGE 'sql' 
             VOLATILE 
@@ -61,7 +61,7 @@ def createFunctions(conn, cursor, schemaName):
         $func$;
 
         CREATE OR REPLACE FUNCTION {0}."calcMinStage"(IN tbl integer)
-            RETURNS TABLE(date date, stage numeric)
+            RETURNS TABLE(date timestamp with time zone, stage numeric)
             LANGUAGE 'plpgsql'
             VOLATILE
             PARALLEL UNSAFE
@@ -75,7 +75,7 @@ def createFunctions(conn, cursor, schemaName):
         $BODY$;
 
         CREATE OR REPLACE FUNCTION {0}."calcMaxStage"(IN tbl integer)
-            RETURNS TABLE(date date, stage numeric)
+            RETURNS TABLE(date timestamp with time zone, stage numeric)
             LANGUAGE 'plpgsql'
             VOLATILE
             PARALLEL UNSAFE
